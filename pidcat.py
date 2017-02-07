@@ -25,6 +25,7 @@ import argparse
 import sys
 import re
 import subprocess
+import json
 from subprocess import PIPE
 
 __version__ = '2.1.0'
@@ -287,6 +288,13 @@ while adb.poll() is None:
     continue
 
   level, tag, owner, message = log_line.groups()
+
+  try:
+      message_dict = json.loads(message)
+      message = json.dumps(message_dict, indent=4, separators=(',', ': '))
+  except:
+      pass
+
   tag = tag.strip()
   start = parse_start_proc(line)
   if start:
